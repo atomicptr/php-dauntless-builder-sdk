@@ -1,0 +1,30 @@
+{
+    "name": "atomicptr/dauntless-builder-sdk",
+    "description": "Library for interacting with Dauntless Builder",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "DauntlessBuilder\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Christopher Kaster",
+            "email": "me@atomicptr.de"
+        }
+    ],
+    "require": {
+        "sqids/sqids": "^0.4.1",
+        "atomicptr/functional": "^0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.18",
+        "pestphp/pest": "^3.5"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}
