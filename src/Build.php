@@ -2,6 +2,7 @@
 
 namespace DauntlessBuilder;
 
+use Atomicptr\Functional\Lst;
 use Atomicptr\Functional\Result;
 use Sqids\Sqids;
 
@@ -12,19 +13,26 @@ final class Build
 
     private static ?Sqids $sqids = null;
 
-    public int $version = static::CURRENT_BUILD_VERSION;
+    public int $version = self::CURRENT_BUILD_VERSION;
     public int $flags = 0;
-    public BuildWeapon $weapon1 = BuildWeapon::empty();
-    public BuildWeapon $weapon2 = BuildWeapon::empty();
-    public BuildArmourPiece $head =  BuildArmourPiece::empty(ArmourType::HEAD);
-    public BuildArmourPiece $torso = BuildArmourPiece::empty(ArmourType::TORSO);
-    public BuildArmourPiece $arms =  BuildArmourPiece::empty(ArmourType::ARMS);
-    public BuildArmourPiece $legs =  BuildArmourPiece::empty(ArmourType::LEGS);
-    public BuildLanternCore $lanternCore = BuildLanternCore::empty();
+    public ?BuildWeapon $weapon1 = null;
+    public ?BuildWeapon $weapon2 = null;
+    public ?BuildArmourPiece $head =  null;
+    public ?BuildArmourPiece $torso = null;
+    public ?BuildArmourPiece $arms =  null;
+    public ?BuildArmourPiece $legs =  null;
+    public ?BuildLanternCore $lanternCore = null;
     public int $checksum = 0;
 
     private function __construct()
     {
+        $this->weapon1 ??= BuildWeapon::empty();
+        $this->weapon2 ??= BuildWeapon::empty();
+        $this->head ??= BuildArmourPiece::empty(ArmourType::HEAD);
+        $this->torso ??= BuildArmourPiece::empty(ArmourType::TORSO);
+        $this->arms ??= BuildArmourPiece::empty(ArmourType::ARMS);
+        $this->legs ??= BuildArmourPiece::empty(ArmourType::LEGS);
+        $this->lanternCore ??= BuildLanternCore::empty();
     }
 
     public function serialize(): Result
@@ -76,6 +84,11 @@ final class Build
 
     public static function fromId(string $buildId): Result
     {
+        // we also want to support urls ig
+        if (str_starts_with($buildId, "http")) {
+            $buildId = Lst::last(explode("/", $buildId));
+        }
+
         $data = static::sqids()->decode($buildId);
 
         $supposedLength = BuildFields::Checksum->value + 1;
