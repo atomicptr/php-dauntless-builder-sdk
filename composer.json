@@ -15,6 +15,7 @@
         }
     ],
     "require": {
+        "php": "^8.3",
         "sqids/sqids": "^0.4.1",
         "atomicptr/functional": "^0"
     },
